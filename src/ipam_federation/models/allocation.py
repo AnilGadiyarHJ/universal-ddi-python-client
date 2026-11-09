@@ -30,6 +30,10 @@ class Allocation(BaseModel):
         default=None, description="Percent of total space allocated.")
     delegated: Optional[StrictInt] = Field(
         default=None, description="Percent of total space delegated.")
+    forward_looking_delegation: Optional[StrictInt] = Field(
+        default=None,
+        description=
+        "Percent of total space in forward looking delegation blocks.")
     overlapping: Optional[StrictInt] = Field(
         default=None,
         description="Percent of total space in overlapping blocks.")
@@ -37,7 +41,8 @@ class Allocation(BaseModel):
         default=None, description="Percent of total space reserved.")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
-        "allocated", "delegated", "overlapping", "reserved"
+        "allocated", "delegated", "forward_looking_delegation", "overlapping",
+        "reserved"
     ]
 
     model_config = ConfigDict(
@@ -73,11 +78,13 @@ class Allocation(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
             "allocated",
             "delegated",
+            "forward_looking_delegation",
             "overlapping",
             "reserved",
             "additional_properties",
@@ -105,10 +112,16 @@ class Allocation(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "allocated": obj.get("allocated"),
-            "delegated": obj.get("delegated"),
-            "overlapping": obj.get("overlapping"),
-            "reserved": obj.get("reserved")
+            "allocated":
+            obj.get("allocated"),
+            "delegated":
+            obj.get("delegated"),
+            "forward_looking_delegation":
+            obj.get("forward_looking_delegation"),
+            "overlapping":
+            obj.get("overlapping"),
+            "reserved":
+            obj.get("reserved")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

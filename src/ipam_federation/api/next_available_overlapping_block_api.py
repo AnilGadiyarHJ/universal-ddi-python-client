@@ -79,7 +79,7 @@ class NextAvailableOverlappingBlockApi:
     ) -> ListNextAvailableOverlappingBlockResponse:
         """List the next available overlapping block.
 
-        Use this method to list the next \"n\" available __OverlappingBlock__ object with user specified predicates. The response will be \"n\" __OverlappingBlock__ objects.
+        Use this method to retrieve the next available __OverlappingBlock__ objects. This returns one or more __OverlappingBlock__ objects from the specified parent __FederatedBlock__ block.
 
         :param id: An application specific resource identity of a resource (required)
         :type id: str
@@ -176,7 +176,7 @@ class NextAvailableOverlappingBlockApi:
     ) -> ApiResponse[ListNextAvailableOverlappingBlockResponse]:
         """List the next available overlapping block.
 
-        Use this method to list the next \"n\" available __OverlappingBlock__ object with user specified predicates. The response will be \"n\" __OverlappingBlock__ objects.
+        Use this method to retrieve the next available __OverlappingBlock__ objects. This returns one or more __OverlappingBlock__ objects from the specified parent __FederatedBlock__ block.
 
         :param id: An application specific resource identity of a resource (required)
         :type id: str
@@ -273,7 +273,7 @@ class NextAvailableOverlappingBlockApi:
     ) -> RESTResponseType:
         """List the next available overlapping block.
 
-        Use this method to list the next \"n\" available __OverlappingBlock__ object with user specified predicates. The response will be \"n\" __OverlappingBlock__ objects.
+        Use this method to retrieve the next available __OverlappingBlock__ objects. This returns one or more __OverlappingBlock__ objects from the specified parent __FederatedBlock__ block.
 
         :param id: An application specific resource identity of a resource (required)
         :type id: str

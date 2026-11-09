@@ -17,9 +17,11 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from ipam_federation.models.allocation import Allocation
+from ipam_federation.models.provider_type import ProviderType
+from ipam_federation.models.utilization_v6 import UtilizationV6
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -40,10 +42,18 @@ class FederatedRealm(BaseModel):
         default=None, description="Time when the object has been created.")
     id: Optional[StrictStr] = Field(default=None,
                                     description="The resource identifier.")
+    metadata: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="The metadata for the federated realm in JSON format.")
     name: StrictStr = Field(
         description=
         "The name of the federated realm. May contain 1 to 256 characters; can include UTF-8."
     )
+    provider: Optional[ProviderType] = Field(
+        default=None,
+        description="The provider type this realm is associated with.")
+    region: Optional[StrictStr] = Field(
+        default=None, description="The region where the realm is located.")
     tags: Optional[Dict[str, Any]] = Field(
         default=None,
         description="The tags for the federated realm in JSON format.")
@@ -52,10 +62,17 @@ class FederatedRealm(BaseModel):
         description=
         "Time when the object has been updated. Equals to _created_at_ if not updated after creation."
     )
+    utilization: Optional[StrictInt] = Field(
+        default=None,
+        description="The percentage of Federated Realm utilization.")
+    utilization_v6: Optional[UtilizationV6] = Field(
+        default=None,
+        description="The IPv6 utilization metrics for the federated realm.")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
-        "allocation_v4", "comment", "created_at", "id", "name", "tags",
-        "updated_at"
+        "allocation_v4", "comment", "created_at", "id", "metadata", "name",
+        "provider", "region", "tags", "updated_at", "utilization",
+        "utilization_v6"
     ]
 
     model_config = ConfigDict(
@@ -90,12 +107,14 @@ class FederatedRealm(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
             "created_at",
             "id",
             "updated_at",
+            "utilization_v6",
             "additional_properties",
         ])
 
@@ -107,6 +126,9 @@ class FederatedRealm(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of allocation_v4
         if self.allocation_v4:
             _dict['allocation_v4'] = self.allocation_v4.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of utilization_v6
+        if self.utilization_v6:
+            _dict['utilization_v6'] = self.utilization_v6.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -133,12 +155,23 @@ class FederatedRealm(BaseModel):
             obj.get("created_at"),
             "id":
             obj.get("id"),
+            "metadata":
+            obj.get("metadata"),
             "name":
             obj.get("name"),
+            "provider":
+            obj.get("provider"),
+            "region":
+            obj.get("region"),
             "tags":
             obj.get("tags"),
             "updated_at":
-            obj.get("updated_at")
+            obj.get("updated_at"),
+            "utilization":
+            obj.get("utilization"),
+            "utilization_v6":
+            UtilizationV6.from_dict(obj["utilization_v6"])
+            if obj.get("utilization_v6") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

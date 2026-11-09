@@ -6,6 +6,7 @@ The response format to retrieve __FederatedRealm__ objects.
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**page** | [**ApiPageInfo**](ApiPageInfo.md) | Page information including total_size when is_total_size_needed is requested. | [optional] 
 **results** | [**List[FederatedRealm]**](FederatedRealm.md) | The list of FederatedRealm objects. | [optional] 
 
 ## Example

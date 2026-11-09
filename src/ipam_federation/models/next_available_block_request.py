@@ -44,6 +44,8 @@ class NextAvailableBlockRequest(BaseModel):
         description=
         "The count of __Block__ required. If not provided, it will default to 1."
     )
+    federated_pool_id: Optional[StrictStr] = Field(
+        default=None, description="The resource identifier.")
     id: Optional[StrictStr] = Field(default=None,
                                     description="The resource identifier.")
     name: Optional[StrictStr] = Field(default=None,
@@ -53,7 +55,7 @@ class NextAvailableBlockRequest(BaseModel):
         description="The tags for the federated block in JSON format.")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
-        "cidr", "comment", "count", "id", "name", "tags"
+        "cidr", "comment", "count", "federated_pool_id", "id", "name", "tags"
     ]
 
     model_config = ConfigDict(
@@ -115,12 +117,20 @@ class NextAvailableBlockRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "cidr": obj.get("cidr"),
-            "comment": obj.get("comment"),
-            "count": obj.get("count"),
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "tags": obj.get("tags")
+            "cidr":
+            obj.get("cidr"),
+            "comment":
+            obj.get("comment"),
+            "count":
+            obj.get("count"),
+            "federated_pool_id":
+            obj.get("federated_pool_id"),
+            "id":
+            obj.get("id"),
+            "name":
+            obj.get("name"),
+            "tags":
+            obj.get("tags")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

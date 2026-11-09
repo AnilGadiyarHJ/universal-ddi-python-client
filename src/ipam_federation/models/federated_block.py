@@ -17,10 +17,12 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from ipam_federation.models.allocation import Allocation
+from ipam_federation.models.network_compliance import NetworkCompliance
+from ipam_federation.models.utilization_v6 import UtilizationV6
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -29,8 +31,7 @@ class FederatedBlock(BaseModel):
     """
     A __FederatedBlock__ object (_federation/federated_block_) is a set of contiguous IP addresses with no gap, expressed as a CIDR block. Federated blocks are hierarchical and may be parented to other federated blocks as long as the parent block fully contains the child and no sibling overlaps. Top level federated blocks are parented to a federated realm.
     """ # noqa: E501
-    address: Optional[StrictStr] = Field(
-        default=None,
+    address: StrictStr = Field(
         description=
         "The address field in form “a.b.c.d/n” where the “/n” may be omitted. In this case, the CIDR value must be defined in the _cidr_ field. When reading, the _address_ field is always in the form “a.b.c.d”."
     )
@@ -51,13 +52,28 @@ class FederatedBlock(BaseModel):
     )
     created_at: Optional[datetime] = Field(
         default=None, description="Time when the object has been created.")
+    federated_pool_id: Optional[StrictStr] = Field(
+        default=None, description="The resource identifier.")
     federated_realm: StrictStr = Field(description="The resource identifier.")
     id: Optional[StrictStr] = Field(default=None,
                                     description="The resource identifier.")
+    metadata: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="The metadata for the federated block in JSON format.")
     name: Optional[StrictStr] = Field(
         default=None,
         description=
         "The name of the federated block. May contain 1 to 256 characters. Can include UTF-8."
+    )
+    network_compliance: Optional[NetworkCompliance] = Field(
+        default=None,
+        description=
+        "The network compliance policy for child objects. This defines the minimum, default, and maximum netmask lengths that can be used when creating child blocks."
+    )
+    network_compliant: Optional[StrictBool] = Field(
+        default=None,
+        description=
+        "Indicates if this block is compliant with its parent's network compliance policy. When false, a trouble dot should be displayed in the UI to indicate non-compliance."
     )
     parent: Optional[StrictStr] = Field(default=None,
                                         description="The resource identifier.")
@@ -65,6 +81,10 @@ class FederatedBlock(BaseModel):
         default=None,
         description="The type of protocol of federated block (_ip4_ or _ip6_)."
     )
+    region: Optional[StrictStr] = Field(
+        default=None,
+        description="The region where the federated block is located.")
+    state: Optional[StrictStr] = None
     tags: Optional[Dict[str, Any]] = Field(
         default=None,
         description="The tags for the federated block in JSON format.")
@@ -73,11 +93,19 @@ class FederatedBlock(BaseModel):
         description=
         "Time when the object has been updated. Equals to _created_at_ if not updated after creation."
     )
+    utilization: Optional[StrictInt] = Field(
+        default=None,
+        description="The percentage of Federated Block utilization.")
+    utilization_v6: Optional[UtilizationV6] = Field(
+        default=None,
+        description="The IPv6 utilization metrics for the federated block.")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
         "address", "allocation_v4", "cidr", "comment", "created_at",
-        "federated_realm", "id", "name", "parent", "protocol", "tags",
-        "updated_at"
+        "federated_pool_id", "federated_realm", "id", "metadata", "name",
+        "network_compliance", "network_compliant", "parent", "protocol",
+        "region", "state", "tags", "updated_at", "utilization",
+        "utilization_v6"
     ]
 
     model_config = ConfigDict(
@@ -113,13 +141,17 @@ class FederatedBlock(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
             "created_at",
             "id",
+            "network_compliant",
             "protocol",
             "updated_at",
+            "utilization_v6",
             "additional_properties",
         ])
 
@@ -131,6 +163,12 @@ class FederatedBlock(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of allocation_v4
         if self.allocation_v4:
             _dict['allocation_v4'] = self.allocation_v4.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of network_compliance
+        if self.network_compliance:
+            _dict['network_compliance'] = self.network_compliance.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of utilization_v6
+        if self.utilization_v6:
+            _dict['utilization_v6'] = self.utilization_v6.to_dict()
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
@@ -159,20 +197,38 @@ class FederatedBlock(BaseModel):
             obj.get("comment"),
             "created_at":
             obj.get("created_at"),
+            "federated_pool_id":
+            obj.get("federated_pool_id"),
             "federated_realm":
             obj.get("federated_realm"),
             "id":
             obj.get("id"),
+            "metadata":
+            obj.get("metadata"),
             "name":
             obj.get("name"),
+            "network_compliance":
+            NetworkCompliance.from_dict(obj["network_compliance"])
+            if obj.get("network_compliance") is not None else None,
+            "network_compliant":
+            obj.get("network_compliant"),
             "parent":
             obj.get("parent"),
             "protocol":
             obj.get("protocol"),
+            "region":
+            obj.get("region"),
+            "state":
+            obj.get("state"),
             "tags":
             obj.get("tags"),
             "updated_at":
-            obj.get("updated_at")
+            obj.get("updated_at"),
+            "utilization":
+            obj.get("utilization"),
+            "utilization_v6":
+            UtilizationV6.from_dict(obj["utilization_v6"])
+            if obj.get("utilization_v6") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

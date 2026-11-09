@@ -18,6 +18,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
+from ipam_federation.models.api_page_info import ApiPageInfo
 from ipam_federation.models.federated_realm import FederatedRealm
 from typing import Optional, Set
 from typing_extensions import Self
@@ -27,10 +28,15 @@ class ListFederatedRealmResponse(BaseModel):
     """
     The response format to retrieve __FederatedRealm__ objects.
     """ # noqa: E501
+    page: Optional[ApiPageInfo] = Field(
+        default=None,
+        description=
+        "Page information including total_size when is_total_size_needed is requested."
+    )
     results: Optional[List[FederatedRealm]] = Field(
         default=None, description="The list of FederatedRealm objects.")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["results"]
+    __properties: ClassVar[List[str]] = ["page", "results"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -72,6 +78,9 @@ class ListFederatedRealmResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of page
+        if self.page:
+            _dict['page'] = self.page.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in results (list)
         _items = []
         if self.results:
@@ -96,6 +105,9 @@ class ListFederatedRealmResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "page":
+            ApiPageInfo.from_dict(obj["page"])
+            if obj.get("page") is not None else None,
             "results":
             [FederatedRealm.from_dict(_item) for _item in obj["results"]]
             if obj.get("results") is not None else None

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **allocated** | **int** | Percent of total space allocated. | [optional] [readonly] 
 **delegated** | **int** | Percent of total space delegated. | [optional] [readonly] 
+**forward_looking_delegation** | **int** | Percent of total space in forward looking delegation blocks. | [optional] [readonly] 
 **overlapping** | **int** | Percent of total space in overlapping blocks. | [optional] [readonly] 
 **reserved** | **int** | Percent of total space reserved. | [optional] [readonly] 
 

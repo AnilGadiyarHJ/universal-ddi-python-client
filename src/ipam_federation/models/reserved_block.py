@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from typing import Optional, Set
@@ -44,19 +44,32 @@ class ReservedBlock(BaseModel):
     )
     created_at: Optional[datetime] = Field(
         default=None, description="Time when the object has been created.")
+    federated_pool_id: Optional[StrictStr] = Field(
+        default=None, description="The resource identifier.")
     federated_realm: StrictStr = Field(description="The resource identifier.")
     id: Optional[StrictStr] = Field(default=None,
                                     description="The resource identifier.")
+    metadata: Optional[Dict[str, Any]] = Field(
+        default=None,
+        description="The metadata for the reserved block in JSON format.")
     name: Optional[StrictStr] = Field(
         default=None,
         description=
         "The name of the reserved block. May contain 1 to 256 characters. Can include UTF-8."
+    )
+    network_compliant: Optional[StrictBool] = Field(
+        default=None,
+        description=
+        "The compliance status of the reserved block, as determined by the federation service."
     )
     parent: Optional[StrictStr] = Field(default=None,
                                         description="The resource identifier.")
     protocol: Optional[StrictStr] = Field(
         default=None,
         description="The type of protocol of reserved block (_ip4_ or _ip6_).")
+    region: Optional[StrictStr] = Field(
+        default=None,
+        description="The region where the reserved block is located.")
     tags: Optional[Dict[str, Any]] = Field(
         default=None,
         description="The tags for the reserved block in JSON format.")
@@ -67,8 +80,9 @@ class ReservedBlock(BaseModel):
     )
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
-        "address", "cidr", "comment", "created_at", "federated_realm", "id",
-        "name", "parent", "protocol", "tags", "updated_at"
+        "address", "cidr", "comment", "created_at", "federated_pool_id",
+        "federated_realm", "id", "metadata", "name", "network_compliant",
+        "parent", "protocol", "region", "tags", "updated_at"
     ]
 
     model_config = ConfigDict(
@@ -104,11 +118,13 @@ class ReservedBlock(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
             "created_at",
             "id",
+            "network_compliant",
             "protocol",
             "updated_at",
             "additional_properties",
@@ -136,17 +152,36 @@ class ReservedBlock(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "address": obj.get("address"),
-            "cidr": obj.get("cidr"),
-            "comment": obj.get("comment"),
-            "created_at": obj.get("created_at"),
-            "federated_realm": obj.get("federated_realm"),
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "parent": obj.get("parent"),
-            "protocol": obj.get("protocol"),
-            "tags": obj.get("tags"),
-            "updated_at": obj.get("updated_at")
+            "address":
+            obj.get("address"),
+            "cidr":
+            obj.get("cidr"),
+            "comment":
+            obj.get("comment"),
+            "created_at":
+            obj.get("created_at"),
+            "federated_pool_id":
+            obj.get("federated_pool_id"),
+            "federated_realm":
+            obj.get("federated_realm"),
+            "id":
+            obj.get("id"),
+            "metadata":
+            obj.get("metadata"),
+            "name":
+            obj.get("name"),
+            "network_compliant":
+            obj.get("network_compliant"),
+            "parent":
+            obj.get("parent"),
+            "protocol":
+            obj.get("protocol"),
+            "region":
+            obj.get("region"),
+            "tags":
+            obj.get("tags"),
+            "updated_at":
+            obj.get("updated_at")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

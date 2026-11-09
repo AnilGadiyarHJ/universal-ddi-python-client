@@ -10,9 +10,14 @@ Name | Type | Description | Notes
 **comment** | **str** | The description of the federated realm. May contain 0 to 1024 characters. Can include UTF-8. | [optional] 
 **created_at** | **datetime** | Time when the object has been created. | [optional] [readonly] 
 **id** | **str** | The resource identifier. | [optional] [readonly] 
+**metadata** | **object** | The metadata for the federated realm in JSON format. | [optional] 
 **name** | **str** | The name of the federated realm. May contain 1 to 256 characters; can include UTF-8. | 
+**provider** | [**ProviderType**](ProviderType.md) | The provider type this realm is associated with. | [optional] 
+**region** | **str** | The region where the realm is located. | [optional] 
 **tags** | **object** | The tags for the federated realm in JSON format. | [optional] 
 **updated_at** | **datetime** | Time when the object has been updated. Equals to _created_at_ if not updated after creation. | [optional] [readonly] 
+**utilization** | **int** | The percentage of Federated Realm utilization. | [optional] 
+**utilization_v6** | [**UtilizationV6**](UtilizationV6.md) | The IPv6 utilization metrics for the federated realm. | [optional] [readonly] 
 
 ## Example
 

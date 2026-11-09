@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from typing import Optional, Set
@@ -44,6 +44,8 @@ class OverlappingBlock(BaseModel):
     )
     created_at: Optional[datetime] = Field(
         default=None, description="Time when the object has been created.")
+    federated_pool_id: Optional[StrictStr] = Field(
+        default=None, description="The resource identifier.")
     federated_realm: StrictStr = Field(description="The resource identifier.")
     id: Optional[StrictStr] = Field(default=None,
                                     description="The resource identifier.")
@@ -51,6 +53,11 @@ class OverlappingBlock(BaseModel):
         default=None,
         description=
         "The name of the overlapping block. May contain 1 to 256 characters. Can include UTF-8."
+    )
+    network_compliant: Optional[StrictBool] = Field(
+        default=None,
+        description=
+        "The compliance status of the overlapping block, as determined by the federation service."
     )
     parent: Optional[StrictStr] = Field(default=None,
                                         description="The resource identifier.")
@@ -68,8 +75,9 @@ class OverlappingBlock(BaseModel):
     )
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
-        "address", "cidr", "comment", "created_at", "federated_realm", "id",
-        "name", "parent", "protocol", "tags", "updated_at"
+        "address", "cidr", "comment", "created_at", "federated_pool_id",
+        "federated_realm", "id", "name", "network_compliant", "parent",
+        "protocol", "tags", "updated_at"
     ]
 
     model_config = ConfigDict(
@@ -105,11 +113,13 @@ class OverlappingBlock(BaseModel):
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
         * OpenAPI `readOnly` fields are excluded.
+        * OpenAPI `readOnly` fields are excluded.
         * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
             "created_at",
             "id",
+            "network_compliant",
             "protocol",
             "updated_at",
             "additional_properties",
@@ -137,17 +147,32 @@ class OverlappingBlock(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "address": obj.get("address"),
-            "cidr": obj.get("cidr"),
-            "comment": obj.get("comment"),
-            "created_at": obj.get("created_at"),
-            "federated_realm": obj.get("federated_realm"),
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "parent": obj.get("parent"),
-            "protocol": obj.get("protocol"),
-            "tags": obj.get("tags"),
-            "updated_at": obj.get("updated_at")
+            "address":
+            obj.get("address"),
+            "cidr":
+            obj.get("cidr"),
+            "comment":
+            obj.get("comment"),
+            "created_at":
+            obj.get("created_at"),
+            "federated_pool_id":
+            obj.get("federated_pool_id"),
+            "federated_realm":
+            obj.get("federated_realm"),
+            "id":
+            obj.get("id"),
+            "name":
+            obj.get("name"),
+            "network_compliant":
+            obj.get("network_compliant"),
+            "parent":
+            obj.get("parent"),
+            "protocol":
+            obj.get("protocol"),
+            "tags":
+            obj.get("tags"),
+            "updated_at":
+            obj.get("updated_at")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

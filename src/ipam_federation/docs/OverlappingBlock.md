@@ -10,9 +10,11 @@ Name | Type | Description | Notes
 **cidr** | **int** | The CIDR of the overlapping block. This is required, if _address_ does not specify it in its input. | [optional] 
 **comment** | **str** | The description for the overlapping block. May contain 0 to 1024 characters. Can include UTF-8. | [optional] 
 **created_at** | **datetime** | Time when the object has been created. | [optional] [readonly] 
+**federated_pool_id** | **str** | The resource identifier. | [optional] 
 **federated_realm** | **str** | The resource identifier. | 
 **id** | **str** | The resource identifier. | [optional] [readonly] 
 **name** | **str** | The name of the overlapping block. May contain 1 to 256 characters. Can include UTF-8. | [optional] 
+**network_compliant** | **bool** | The compliance status of the overlapping block, as determined by the federation service. | [optional] [readonly] 
 **parent** | **str** | The resource identifier. | [optional] 
 **protocol** | **str** | The type of protocol of overlapping block (_ip4_ or _ip6_). | [optional] [readonly] 
 **tags** | **object** | The tags for the overlapping block in JSON format. | [optional] 

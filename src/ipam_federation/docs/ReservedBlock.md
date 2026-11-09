@@ -10,11 +10,15 @@ Name | Type | Description | Notes
 **cidr** | **int** | The CIDR of the reserved block. This is required field, if _address_ does not specify it in its input. | [optional] 
 **comment** | **str** | The description for the reserved block. May contain 0 to 1024 characters. Can include UTF-8. | [optional] 
 **created_at** | **datetime** | Time when the object has been created. | [optional] [readonly] 
+**federated_pool_id** | **str** | The resource identifier. | [optional] 
 **federated_realm** | **str** | The resource identifier. | 
 **id** | **str** | The resource identifier. | [optional] [readonly] 
+**metadata** | **object** | The metadata for the reserved block in JSON format. | [optional] 
 **name** | **str** | The name of the reserved block. May contain 1 to 256 characters. Can include UTF-8. | [optional] 
+**network_compliant** | **bool** | The compliance status of the reserved block, as determined by the federation service. | [optional] [readonly] 
 **parent** | **str** | The resource identifier. | [optional] 
 **protocol** | **str** | The type of protocol of reserved block (_ip4_ or _ip6_). | [optional] [readonly] 
+**region** | **str** | The region where the reserved block is located. | [optional] 
 **tags** | **object** | The tags for the reserved block in JSON format. | [optional] 
 **updated_at** | **datetime** | Time when the object has been updated. Equals to _created_at_ if not updated after creation. | [optional] [readonly] 
 
